@@ -1,0 +1,36 @@
+{
+  "Comment": "This state machine serializes image data, classifies the image using a machine learning model, and computes the confidence of the classification. It doesn't include retry functionality for error handling during Lambda function execution. The state machine can be triggered by an event or API call, and can be used to automate the processing of large quantities of image data.",
+  "StartAt": "serializeImage",
+  "States": {
+    "serializeImage": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "OutputPath": "$.Payload",
+      "Parameters": {
+        "Payload.$": "$",
+        "FunctionName": "arn:aws:lambda:us-east-1:214645871197:function:serializeImageData:$LATEST"
+      },
+      "Next": "classifyImage"
+    },
+    "classifyImage": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke.waitForTaskToken",
+      "OutputPath": "$.Payload",
+      "Parameters": {
+        "Payload.$": "$",
+        "FunctionName": "arn:aws:lambda:us-east-1:214645871197:function:classifyImage:$LATEST"
+      },
+      "Next": "confidenceImage"
+    },
+    "confidenceImage": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "OutputPath": "$.Payload",
+      "Parameters": {
+        "Payload.$": "$",
+        "FunctionName": "arn:aws:lambda:us-east-1:214645871197:function:confidenceImage:$LATEST"
+      },
+      "End": true
+    }
+  }
+}
