@@ -1,4 +1,4 @@
-# Project Name
+# Scone Unlimited
 
 We'll use a sample dataset called CIFAR to simulate the challenges Scones Unlimited are facing in Image Classification. In order to start working with CIFAR we'll need to:
 
