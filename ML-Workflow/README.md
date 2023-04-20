@@ -9,6 +9,7 @@ We'll use a sample dataset called CIFAR to simulate the challenges Scones Unlimi
 In other words, we're going to do some simple ETL!
 
 ## Files structure
+```bash
 .
 ├── lambdas/
 │   ├── classifyImage.py
@@ -22,6 +23,7 @@ In other words, we're going to do some simple ETL!
 │       ├── all_states_green.png
 │       └── two_states_green_95_conf.png
 └── README.md
+```
 
 ## Features
 
