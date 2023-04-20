@@ -2,8 +2,7 @@ import json
 import boto3
 import base64
 
-# Fill this in with the name of your deployed model
-ENDPOINT_NAME = "image-classification-2023-04-19-11-00-33-457"
+ENDPOINT_NAME = "image-classification-2023-04-20-15-20-25-339"
 
 def lambda_handler(event, context):
     # Decode the image data
@@ -11,20 +10,32 @@ def lambda_handler(event, context):
 
     # Instantiate a boto3 client for invoking SageMaker endpoint
     client = boto3.client('sagemaker-runtime')
+    
+    # Serialize the image data in the correct format for SageMaker
+    image_content = bytearray(image)
+    content_type = 'image/png'
+    accept = 'application/json'
 
     # Invoke the endpoint with the image data
     response = client.invoke_endpoint(
         EndpointName=ENDPOINT_NAME,
         ContentType='image/png',
-        Body=image
+        Accept=accept,
+        Body=image_content
     )
     
     # Decode the response from SageMaker
-    inferences = response['Body'].read().decode()
+    response_body = json.loads(response['Body'].read().decode())
 
     # We return the data back to the Step Function    
-    event["inferences"] = inferences
+    event["body"]["inferences"] = response_body
+    
     return {
-        'statusCode': 200,
-        'body': json.dumps(event)
+        "statusCode": 200,
+        "body": {
+            "image_data": event['body']['image_data'],
+            "s3_bucket": event['body']['s3_bucket'],
+            "s3_key": event['body']['s3_key'],
+            "inferences": event['body']['inferences'],
+        }
     }

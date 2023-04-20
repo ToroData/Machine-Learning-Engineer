@@ -8,6 +8,21 @@ We'll use a sample dataset called CIFAR to simulate the challenges Scones Unlimi
 
 In other words, we're going to do some simple ETL!
 
+## Files structure
+.
+├── lambdas/
+│   ├── classifyImage.py
+│   ├── confidenceImage.py
+│   └── serializeImage.py
+├── notebooks/
+│   └── Scones_Unlimited.ipynb
+├── stepFunctions/
+│   ├── stepFunction.json
+│   └── img/
+│       ├── all_states_green.png
+│       └── two_states_green_95_conf.png
+└── README.md
+
 ## Features
 
 - Step Functions
