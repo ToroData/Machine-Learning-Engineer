@@ -1,8 +1,8 @@
 # Machine Learning Engineer and Deep Learning Projects
 
-
-<img src="https://thedatascientist.digital/img/logo.png" alt="Logo" width="25%">
-
+<div align="center">
+    <img src="https://thedatascientist.digital/img/logo.png" alt="Logo" width="25%">
+</div>
 
 
 This repository contains several Machine Learning and Deep Learning projects, including neural network training, image classification using AWS SageMaker, and an ML workflow based on Step Functions. The projects are designed to demonstrate technical skills in areas such as data manipulation, data modeling, and model deployment.
