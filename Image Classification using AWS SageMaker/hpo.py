@@ -12,7 +12,6 @@ import time
 import argparse
 import logging
 import sys
-import sagemaker_containers
 from logging import FileHandler
 from PIL import ImageFile
 ImageFile.LOAD_TRUNCATED_IMAGES = True
@@ -127,23 +126,16 @@ def train(model, train_loader, epochs, criterion, optimizer):
             loss = criterion(outputs, labels)
             loss.backward()
             optimizer.step()
-            if lr_scheduler is not None:
-                lr_scheduler.step()
                 
             if i % 10 == 0:
                 logger.debug(f'Training epoch {epoch+1}/{epochs}, batch {i+1}/{len(train_loader)}, loss = {loss.item():.4f}')
-        
-        train_acc = test(model, train_loader, criterion, mode='train')
-        val_acc = test(model, val_loader, criterion, mode='val')
-        
-        logger.info(f'Epoch {epoch+1}/{epochs}: train acc = {train_acc:.4f}, val acc = {val_acc:.4f}')
-            
+                    
     logger.info('Training complete.')
             
     return model 
 
 
-def net():
+def net(train_data_loader):
     """
     Creates a ResNet50 model with additional layers for fine-tuning, and returns the model.
     
@@ -156,7 +148,7 @@ def net():
     logger = logging.getLogger(__name__)
     logger.info('Creating the model...')
 
-    model = models.resnet50(weights='ResNet50_Weights.DEFAULT')
+    model = models.resnet50(pretrained = True)
     
     # Freezing pretrained parameters
     for param in model.parameters():
@@ -164,7 +156,7 @@ def net():
     
     # Adding new layers for fine-tuning
     num_features = model.fc.in_features
-    num_classes = len(train_loader.dataset.classes)
+    num_classes = len(train_data_loader.dataset.classes)
     model.fc = nn.Sequential(nn.Linear(num_features, 256), 
                               nn.ReLU(),                 
                               nn.Linear(256, 128),
@@ -211,20 +203,6 @@ def create_data_loaders(data, batch_size):
     test_path = os.path.join(data, 'test')
     validation_path = os.path.join(data, 'valid')
     
-    if not os.path.exists(train_path) or not os.path.exists(test_path) or not os.path.exists(validation_path):
-        raise ValueError("One or more data directories not found.")
-    
-    # Add logic for distributed training
-    if sagemaker_containers.training_env():
-        logger.info("Using distributed data parallel")
-        train_sampler = torch.utils.data.distributed.DistributedSampler(train_dataset)
-        test_sampler = torch.utils.data.distributed.DistributedSampler(test_dataset)
-        validation_sampler = torch.utils.data.distributed.DistributedSampler(validation_dataset)
-    else:
-        train_sampler = None
-        test_sampler = None
-        validation_sampler = None
-    
     train_transform = transforms.Compose([transforms.RandomHorizontalFlip(p=0.5),
                                           transforms.Resize(256),
                                           transforms.Resize((224, 224)),
@@ -238,9 +216,9 @@ def create_data_loaders(data, batch_size):
     test_dataset = torchvision.datasets.ImageFolder(root=test_path, transform=test_transform)
     validation_dataset = torchvision.datasets.ImageFolder(root=validation_path, transform=test_transform)
     
-    train_data_loader = torch.utils.data.DataLoader(train_dataset, batch_size=batch_size, shuffle=True, sampler=train_sampler)
-    test_data_loader = torch.utils.data.DataLoader(test_dataset, batch_size=batch_size, shuffle=False, sampler=test_sampler)
-    validation_data_loader = torch.utils.data.DataLoader(validation_dataset, batch_size=batch_size, shuffle=False, sampler=validation_sampler)
+    train_data_loader = torch.utils.data.DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+    test_data_loader = torch.utils.data.DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
+    validation_data_loader = torch.utils.data.DataLoader(validation_dataset, batch_size=batch_size, shuffle=False)
     
     logger.info(f'Train dataset loaded with {len(train_dataset)} images')
     logger.info(f'Test dataset loaded with {len(test_dataset)} images')
@@ -265,30 +243,22 @@ def main(args):
     logger = logging.getLogger(__name__)
     logger.info("Starting training...")
     model_path = os.path.join(args.model_dir, 'model.pth')
+    # Train a new model
+    logger.info("Training a new model")
     
-    if os.path.exists(model_path):
-        # Load previously saved model for inference
-        logger.info("Loading model from {}".format(model_path))
-        model = net()
-        model.load_state_dict(torch.load(model_path))
-        logger.info("Model loaded successfully")
-    else:
-        # Train a new model
-        logger.info("Training a new model")
-        model = net()
-        
-        loss_criterion = nn.CrossEntropyLoss()
-        optimizer = optim.Adam(model.fc.parameters(), lr=0.001)
-        
-        train_data_loader, test_data_loader, _ = create_data_loaders(data=args.data_dir, batch_size=args.batch_size)
-        
-        model = train(model, train_data_loader, args.epochs, loss_criterion, optimizer)
-        
-        test(model, test_data_loader, loss_criterion)
-        
-        logger.info("Saving the model to {}".format(model_path))
-        torch.save(model.state_dict(), model_path)
-        logger.info("Model saved successfully")
+    train_data_loader, test_data_loader, _ = create_data_loaders(data=args.data_dir, batch_size=args.batch_size)
+    model = net(train_data_loader)
+
+    loss_criterion = nn.CrossEntropyLoss()
+    optimizer = optim.Adam(model.fc.parameters(), lr=0.001)
+
+    model = train(model, train_data_loader, args.epochs, loss_criterion, optimizer)
+
+    test(model, test_data_loader, loss_criterion)
+
+    logger.info("Saving the model to {}".format(model_path))
+    torch.save(model.state_dict(), model_path)
+    logger.info("Model saved successfully")
     
 if __name__=='__main__':
     parser = argparse.ArgumentParser()
