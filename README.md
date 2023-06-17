@@ -97,10 +97,6 @@ If you would like to replicate any of the projects in this repository, please re
 This project is licensed under the MIT License - see the [MIT LICENSE](https://choosealicense.com/licenses/mit/) file for details.
 
 
-
 ## Author
 
 - [@RicardSantiagoRaigadaGarcía](https://www.thedatascientist.digital/)
-
-
-

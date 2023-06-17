@@ -1,3 +1,5 @@
+#TODO: Import your dependencies.
+#For instance, below are some dependencies you might need if you are using Pytorch
 import numpy as np
 import torch
 import torch.nn as nn
@@ -72,8 +74,7 @@ def test(model, test_loader, criterion):
     
     average_accuracy = running_corrects/len(test_loader.dataset)
     average_loss = test_loss/len(test_loader.dataset)
-    logger.info(f'Testing Accuracy: {average_accuracy:.4f}')
-    logger.info(f'Testing Loss: {average_loss:.4f}')
+    logger.info(f'Test set: Average loss: {average_loss}, Accuracy: {100*average_accuracy}%')
     
     # Logger info
     if average_accuracy > 0.9:
@@ -120,16 +121,16 @@ def train(model, train_loader, epochs, criterion, optimizer):
     for epoch in range(epochs):
         model.train()
         
-        for i, (inputs, labels) in enumerate(train_loader):
+        for inputs, labels in train_loader:
             optimizer.zero_grad()
             outputs = model(inputs)
             loss = criterion(outputs, labels)
             loss.backward()
             optimizer.step()
-                
-            if i % 10 == 0:
-                logger.debug(f'Training epoch {epoch+1}/{epochs}, batch {i+1}/{len(train_loader)}, loss = {loss.item():.4f}')
-                    
+            count += len(inputs)
+            if count > 400:
+                break
+                  
     logger.info('Training complete.')
             
     return model 
@@ -240,6 +241,7 @@ def main(args):
     Returns:
         None
     """
+    
     logger = logging.getLogger(__name__)
     logger.info("Starting training...")
     model_path = os.path.join(args.model_dir, 'model.pth')
@@ -247,17 +249,18 @@ def main(args):
     logger.info("Training a new model")
     
     train_data_loader, test_data_loader, _ = create_data_loaders(data=args.data_dir, batch_size=args.batch_size)
-    model = net(train_data_loader)
-
+    
+    model=net(train_data_loader)
+    
     loss_criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.fc.parameters(), lr=0.001)
-
+    
     model = train(model, train_data_loader, args.epochs, loss_criterion, optimizer)
 
     test(model, test_data_loader, loss_criterion)
 
     logger.info("Saving the model to {}".format(model_path))
-    torch.save(model.state_dict(), model_path)
+    torch.save(model.state_dict(), os.path.join(args.model_dir, 'model.pth'))
     logger.info("Model saved successfully")
     
 if __name__=='__main__':
