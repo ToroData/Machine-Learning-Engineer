@@ -22,6 +22,7 @@ For this experiment, I chose to use a pre-trained Resnet50 model for the dog bre
 The hyperparameter search aims to find the optimal set of hyperparameters that can yield the best performance for our model.
 
 ![hyperparameter-tuning](img-readme/hyperparameter-tuning.png)
+![cloudwatch_first_eval](img/cloudwatch_first_eval.png)
 ![training-jobs](img-readme/training-jobs.png)
 
 Best hyperparameter: 
