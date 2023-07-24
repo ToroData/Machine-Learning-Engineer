@@ -60,7 +60,7 @@ Overall, the Debugger built-in rules and their recommendations offer valuable gu
 
 ## Model Deployment
 
-![endpoind](img-readme/endpoints.png)
+![endpoints](img-readme/endpoints.png)
 
 
 To call the deployed endpoint without showing the actual code, you would typically use an HTTP POST request to the endpoint's URL. The URL of the endpoint is provided when you deploy the model using Amazon SageMaker.
