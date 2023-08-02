@@ -60,7 +60,7 @@ The Lambda function is a Python code designed to be invoked as an AWS Lambda fun
 
 ![test_lambda](img/test_lambda.png)
 ![policies_IAM_lambda](img/policies_IAM_lambda.png)
-![dashboard](img/dashboard.png)
+![dashboard_IAM](img/dashboard_IAM.png)
 
 AWS Lambda and IAM (Identity and Access Management) play crucial roles in securing serverless architectures. However, there are certain security considerations and vulnerabilities that organizations need to be aware of to ensure robust protection. One potential insecurity is the misconfiguration of IAM roles and permissions for Lambda functions. Granting excessive permissions to a Lambda function could lead to unintended access to sensitive resources, exposing the entire AWS environment to potential risks. Additionally, improper handling of IAM roles can lead to privilege escalation attacks, where malicious actors gain unauthorized access to resources beyond their intended scope. Organizations must carefully manage IAM roles associated with Lambda functions, adhering to the principle of least privilege to minimize potential damage in case of a security breach. Regular auditing and monitoring of IAM policies are essential to identify and remediate any security gaps, ensuring a more resilient and secure serverless architecture.
 
