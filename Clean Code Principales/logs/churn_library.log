@@ -1,0 +1,7 @@
+root - INFO - Importing data.
+root - INFO - Starting EDA.
+root - INFO - EDA completed.
+root - INFO - Starting model training.
+root - INFO - Random Forest Classifier trained and saved.
+root - INFO - Logistic Regression Classifier trained and saved.
+root - INFO - Model training completed.
