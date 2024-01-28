@@ -27,15 +27,15 @@ To execute the scripts successfully, follow these steps:
 
 2. Run Churn Library Script: Execute `churn_library.py` to perform data preprocessing, EDA, feature engineering, model training, and evaluation. This script will generate models in the models/ directory and EDA plots in the images/ directory.
 
-"""
+```
 python churn_library.py
-"""
+```
 
 3. Run Testing and Logging Script: Execute `churn_script_logging_and_testing.py` to run tests on the functions defined in `churn_library.py`. This will also generate log files that record the process and outcomes of the tests.
 
 
-"""
+```
 python churn_script_logging_and_testing.py
-"""
+```
 
 When you run these files, you should see logs being generated that inform you of the process, any errors or issues encountered, and the success of different operations. The tests will validate the correctness of the functions and the integrity of the data processing and model training.

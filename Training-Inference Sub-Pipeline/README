@@ -1,0 +1,71 @@
+# Random Forest Inference Pipeline
+
+## Project Overview
+
+This project focuses on implementing an inference pipeline for a Random Forest classifier. The main script, `main.py`, drives the pipeline, and the specific implementation details for the Random Forest component are to be completed in the `run.py` script within the `random_forest` component.
+
+## Getting Started
+
+### Prerequisites
+
+Make sure you have the necessary dependencies installed, and the required dataset specified in the `config.yaml` file. If you need the course exercise repository, you can follow the link provided in the instructions.
+
+### Instructions
+
+1. Open the `run.py` script within the `random_forest` component.
+2. Locate the function `get_inference_pipeline`.
+3. Complete all the missing pieces as per the instructions within the file.
+
+After completing the implementation, run your Random Forest using the following command:
+
+```bash
+mlflow run .
+```
+
+Ensure to check the `config.yaml` file for information about the dataset being used and other default parameters.
+
+## Project Structure
+
+The project structure includes the following key files and directories:
+
+- `main.py`: Main script driving the pipeline.
+- `random_forest/run.py`: Script containing the implementation of the Random Forest component.
+- `config.yaml`: Configuration file specifying dataset details and default parameters.
+- `conda.yml`: Conda environment file.
+
+## Running the Inference Pipeline
+
+The `main.py` script orchestrates the entire pipeline. It performs the following steps:
+
+1. Downloads and reads the training artifact.
+2. Extracts the target from the features.
+3. Splits the data into training and validation sets.
+4. Sets up the inference pipeline using the `get_inference_pipeline` function.
+5. Fits the pipeline on the training data.
+6. Scores the model using the validation set.
+
+## Inference Pipeline Configuration
+
+The inference pipeline involves three separate preprocessing tracks:
+
+- Categorical features: Imputation and ordinal encoding.
+- Numerical features: Imputation and standard scaling.
+- Textual ("nlp") features: Imputation, reshaping, and TF-IDF vectorization.
+
+These tracks are combined using the `ColumnTransformer`. The configuration for the Random Forest model is loaded from a JSON file specified in the command-line arguments.
+
+## Visualizations and Logging
+
+The project logs key information and visualizations to [Weights & Biases](https://wandb.ai/) for monitoring and analysis. Feature importance and confusion matrix visualizations are logged for model evaluation.
+
+## Running the Script
+
+To run the script, use the following command-line arguments:
+
+```bash
+python main.py --train_data <path-to-train-data-artifact> --model_config <path-to-model-config-json>
+```
+
+Make sure to replace `<path-to-train-data-artifact>` and `<path-to-model-config-json>` with the appropriate file paths.
+
+Feel free to explore and modify the code to enhance the functionality or adapt it to your specific requirements.
