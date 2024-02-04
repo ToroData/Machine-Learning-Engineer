@@ -239,7 +239,7 @@ def save_model(
     Args:
         model (sklearn.linear_model.LogisticRegression): Trained model.
         output_model_path (str): Output model path.
-        model_path (str): Full path to save the model.
+        model_path (str): Name of the model.
     """
     create_output_folder(output_model_path)
     logging.info(f"Saving {model_path}")
@@ -261,7 +261,7 @@ def main():
 
     model = train_model(X_train, X_test, y_train, y_test, hyperparameters)
     save_model(
-        model_path,
+        model,
         config['output_model_path'],
         os.path.join(
             model_path,
