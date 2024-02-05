@@ -1,0 +1,1 @@
+*/10 * * * * (/mnt/c/Users/usuario/OneDrive/Documentos/UOC/DATA SCIENCE/2023-2/AWS ML/Machine-Learning-Engineer/Dynamic Risk Assessment System && python fullprocess.py)

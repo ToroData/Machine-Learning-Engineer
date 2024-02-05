@@ -46,11 +46,9 @@ def check_new_data(input_folder_path, prod_deployment_path):
 def ingest_new_data(files, input_folder_path, output_folder_path):
     # Ingest new data
     if files:
-        logging.info("ingesting new files")
         ingestion.merge_multiple_dataframe(input_folder_path, output_folder_path)
         return True
     else:
-        logging.info("No new files")
         return False
 
 
@@ -114,11 +112,11 @@ def main():
     new_files = check_new_data(input_folder_path, prod_deployment_path)
     move_to_next_step = ingest_new_data(new_files, input_folder_path, output_folder_path)
     
-    if move_to_next_step:
-        move_to_next_step = check_model_drift(move_to_next_step, output_folder_path, prod_deployment_path)
-        move_to_next_step = retrain_model(move_to_next_step)
-        move_to_next_step = redeploy_model(move_to_next_step)
-        move_to_next_step = run_diagnostics_and_reporting(move_to_next_step)
+    # if move_to_next_step:
+    #     move_to_next_step = check_model_drift(move_to_next_step, output_folder_path, prod_deployment_path)
+    #     move_to_next_step = retrain_model(move_to_next_step)
+    #     move_to_next_step = redeploy_model(move_to_next_step)
+    #     move_to_next_step = run_diagnostics_and_reporting(move_to_next_step)
 
 if __name__ == '__main__':
     main()
