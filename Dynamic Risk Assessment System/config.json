@@ -1,12 +1,12 @@
 {
-    "input_folder_path": "practicedata",
+    "input_folder_path": "sourcedata",
     "output_folder_path": "ingesteddata",
     "test_data_path": "testdata",
-    "output_model_path": "practicemodels",
+    "output_model_path": "models",
     "prod_deployment_path": "production_deployment",
     "hyperparameters": {
-        "tol": 0.0005115683834050798,
-        "C": 0.580637235622415,
-        "random_state": 555
+        "tol": 0.0008953772470859323,
+        "C": 0.7596877449431017,
+        "random_state": 42
     }
 }

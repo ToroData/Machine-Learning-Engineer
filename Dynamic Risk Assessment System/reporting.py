@@ -393,7 +393,7 @@ def generate_pdf_report(confusion_matrix: pd.DataFrame) -> str:
 
     # Add the confusion matrix plot
     story.append(Paragraph("Confusion Matrix:", styles['Heading2']))
-    cm_img = Image("practicemodels/confusionmatrix.png", 4 * inch, 3 * inch)
+    cm_img = Image("practicemodels/confusionmatrix2.png", 4 * inch, 3 * inch)
     cm_img.hAlign = 'CENTER'
     story.append(cm_img)
     story.append(Spacer(1, 0.25 * inch))
@@ -466,7 +466,7 @@ def score_model():
     to locate the necessary files and directories for its operation.
     """
     confusion_matrix = generate_confusion_matrix(
-        os.path.join(model_path, 'confusionmatrix.png'))
+        os.path.join(model_path, 'confusionmatrix2.png'))
     pdf_report = generate_pdf_report(confusion_matrix)
 
 

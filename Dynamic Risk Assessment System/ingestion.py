@@ -121,7 +121,7 @@ def save_ingested_files_metadata(
     # Save the list of ingested files as ingestedfiles.txt
     logging.info("Saving ingested metadata")
     ingested_files_path = os.path.join(output_folder_path, 'ingestedfiles.txt')
-    with open(ingested_files_path, 'w') as ingested_file:
+    with open(ingested_files_path, 'a') as ingested_file:
         for file in ingested_files:
             ingested_file.write(
                 f"{file}:\tIngestion date: {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}\n")

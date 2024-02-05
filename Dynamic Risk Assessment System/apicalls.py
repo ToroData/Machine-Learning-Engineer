@@ -29,6 +29,6 @@ responses = {'Predictions':response1.decode('utf-8'),
             'Diagnostics':response4.decode('utf-8')}
 
 # Write the responses
-filepath = os.path.join(model_path,'apireturns.txt')
+filepath = os.path.join(model_path,'apireturns2.txt')
 with open(filepath,'w') as f:
     json.dump(responses, f, indent=4)

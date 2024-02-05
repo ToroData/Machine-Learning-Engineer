@@ -53,7 +53,7 @@ test_data_path = os.path.join(config['test_data_path'])
 prod_deployment_path = os.path.join(config['prod_deployment_path'])
 
 
-def model_predictions() -> list:
+def model_predictions(dataset=None) -> list:
     """
     Get predictions made by the deployed model for a given dataset.
 
@@ -65,11 +65,12 @@ def model_predictions() -> list:
     """
     logging.info("Running model_predictions function")
     # Load the dataset from the production deployment directory
-    try:
-        dataset = pd.read_csv(os.path.join(test_data_path, 'testdata.csv'))
-        logging.info("Dataset loaded successfully")
-    except Exception as e:
-        return logging.error(f"Can't load the dataset. ERROR: {e}")
+    if dataset is None:
+        try:
+            dataset = pd.read_csv(os.path.join(test_data_path, 'testdata.csv'))
+            logging.info("Dataset loaded successfully")
+        except Exception as e:
+            return logging.error(f"Can't load the dataset. ERROR: {e}")
 
     # Load the deployed model from the production deployment directory
     try:

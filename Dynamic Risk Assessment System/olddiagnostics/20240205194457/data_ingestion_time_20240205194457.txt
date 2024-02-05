@@ -1,0 +1,1 @@
+data_ingestion_time: 0.5053149000000001 seconds
