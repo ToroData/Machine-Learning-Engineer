@@ -2,7 +2,7 @@ from flask import Flask, session, jsonify, request
 import json
 import os
 import pandas as pd
-import diagnosis
+import diagnostics
 from scoring import score_model
 
 
@@ -19,7 +19,7 @@ dataset_csv_path = os.path.join(config['output_folder_path'])
 prediction_model = None
 
 
-#######################Prediction Endpoint
+# Prediction Endpoint
 @app.route("/prediction", methods=['POST','OPTIONS'])
 def predict():        
     #call the prediction function you created in Step 3
@@ -32,22 +32,22 @@ def predict():
         dataset = pd.read_csv(file)
         return {'predictions': str(model_predictions(dataset))}
 
-#######################Scoring Endpoint
+# Scoring Endpoint
 @app.route("/scoring", methods=['GET','OPTIONS'])
-def stats():        
+def get_score():        
     #check the score of the deployed model
     return {'F1 score': score_model()}
 
-#######################Summary Statistics Endpoint
+# Summary Statistics Endpoint
 @app.route("/summarystats", methods=['GET','OPTIONS'])
-def stats():        
+def get_stats():        
     #check means, medians, and modes for each column
     summary_data = diagnostics.dataframe_summary()
     return summary_data
 
-#######################Diagnostics Endpoint
+# Diagnostics Endpoint
 @app.route("/diagnostics", methods=['GET','OPTIONS'])
-def stats():        
+def get_diagnostics():        
     #check timing and percent NA values
     missing_data_percentages = diagnostics.missing_data()
     timing = diagnostics.execution_time()
