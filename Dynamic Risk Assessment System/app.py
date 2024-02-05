@@ -1,12 +1,9 @@
 from flask import Flask, session, jsonify, request
-import pandas as pd
-import numpy as np
-import pickle
-import create_prediction_model
-import diagnosis 
-import predict_exited_from_saved_model
 import json
 import os
+import pandas as pd
+import diagnosis
+from scoring import score_model
 
 
 
@@ -26,25 +23,35 @@ prediction_model = None
 @app.route("/prediction", methods=['POST','OPTIONS'])
 def predict():        
     #call the prediction function you created in Step 3
-    return #add return value for prediction outputs
+    if request.method == 'POST':
+        file = request.files['filename']
+        dataset = pd.read_csv(file)
+        return model_predictions(dataset)
+    if request.method == 'GET':
+        file = request.args.get('filename')
+        dataset = pd.read_csv(file)
+        return {'predictions': str(model_predictions(dataset))}
 
 #######################Scoring Endpoint
 @app.route("/scoring", methods=['GET','OPTIONS'])
 def stats():        
     #check the score of the deployed model
-    return #add return value (a single F1 score number)
+    return {'F1 score': score_model()}
 
 #######################Summary Statistics Endpoint
 @app.route("/summarystats", methods=['GET','OPTIONS'])
 def stats():        
     #check means, medians, and modes for each column
-    return #return a list of all calculated summary statistics
+    summary_data = diagnostics.dataframe_summary()
+    return summary_data
 
 #######################Diagnostics Endpoint
 @app.route("/diagnostics", methods=['GET','OPTIONS'])
 def stats():        
     #check timing and percent NA values
-    return #add return value for all diagnostics
+    missing_data_percentages = diagnostics.missing_data()
+    timing = diagnostics.execution_time()
+    return [timing, missing_data_percentages]
 
 if __name__ == "__main__":    
     app.run(host='0.0.0.0', port=8000, debug=True, threaded=True)
