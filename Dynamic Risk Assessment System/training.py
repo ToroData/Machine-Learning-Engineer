@@ -139,8 +139,8 @@ def objective(trial: optuna.trial.Trial):
     # warm_start = trial.suggest_categorical('warm_start', [False, True])
 
     params = {
-        'tol': trial.suggest_uniform('tol', 1e-6, 1e-3),
-        'C': trial.suggest_loguniform("C", 1e-2, 1),
+        'tol': trial.suggest_float('tol', 1e-6, 1e-3),
+        'C': trial.suggest_float("C", 1e-2, 1, log=True),
         'random_state': trial.suggest_categorical('random_state', [0, 42, 2021, 555]),
         "n_jobs": -1
     }
