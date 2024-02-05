@@ -17,7 +17,7 @@ filepath = os.path.join(test_data_path,'testdata.csv')
 # Make a POST request to the /prediction endpoint
 response1 = requests.post(URL + '/prediction' + f'?filename={filepath}').content
 
-#Call each API endpoint and store the responses
+# Call each API endpoint and store the responses
 response2 = requests.get(URL + '/scoring').content
 response3 = requests.get(URL + '/summarystats').content
 response4 = requests.get(URL + '/diagnostics').content
