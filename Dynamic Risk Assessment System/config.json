@@ -5,8 +5,8 @@
     "output_model_path": "models",
     "prod_deployment_path": "production_deployment",
     "hyperparameters": {
-        "tol": 0.0008953772470859323,
-        "C": 0.7596877449431017,
-        "random_state": 42
+        "tol": 0.0009978528119046646,
+        "C": 0.14406981382146086,
+        "random_state": 555
     }
 }

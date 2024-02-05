@@ -192,7 +192,7 @@ def read_ingested_files_info(file_path: str) -> list:
     # Process and format each line
     formatted_lines = []
     for line in lines:
-        parts = line.split('\t')  # Assuming the file is tab-delimited
+        parts = line.split('\t')
         if len(parts) == 2:
             formatted_lines.append(f"{parts[0].strip()} - {parts[1].strip()}")
 
@@ -393,7 +393,7 @@ def generate_pdf_report(confusion_matrix: pd.DataFrame) -> str:
 
     # Add the confusion matrix plot
     story.append(Paragraph("Confusion Matrix:", styles['Heading2']))
-    cm_img = Image("practicemodels/confusionmatrix2.png", 4 * inch, 3 * inch)
+    cm_img = Image(f"{model_path}/confusionmatrix2.png", 4 * inch, 3 * inch)
     cm_img.hAlign = 'CENTER'
     story.append(cm_img)
     story.append(Spacer(1, 0.25 * inch))

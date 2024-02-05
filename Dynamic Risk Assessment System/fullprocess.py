@@ -50,7 +50,7 @@ def ingest_new_data(files, input_folder_path, output_folder_path):
         ingestion.merge_multiple_dataframe(input_folder_path, output_folder_path)
         return True
     else:
-        logging.info("No new files - ending process")
+        logging.info("No new files")
         return False
 
 
@@ -69,11 +69,11 @@ def check_model_drift(move_to_next_step, output_folder_path, prod_deployment_pat
 
     logging.info(f'Latest score: {latest_score}, New score: {new_score}')
 
-    if new_score >= latest_score:
-        logging.info('No model drift - ending process')
+    if new_score <= latest_score:
+        logging.info('No model drift')
         return False
-
-    return True
+    else:
+        return True
 
 def retrain_model(move_to_next_step):
     # Train new model if there's model drift
@@ -118,7 +118,7 @@ def main():
         move_to_next_step = check_model_drift(move_to_next_step, output_folder_path, prod_deployment_path)
         move_to_next_step = retrain_model(move_to_next_step)
         move_to_next_step = redeploy_model(move_to_next_step)
-    move_to_next_step = run_diagnostics_and_reporting(move_to_next_step=True)
+        move_to_next_step = run_diagnostics_and_reporting(move_to_next_step)
 
 if __name__ == '__main__':
     main()
