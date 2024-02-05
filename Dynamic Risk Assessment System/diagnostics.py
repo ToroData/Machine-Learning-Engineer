@@ -39,6 +39,7 @@ import logging
 import sys
 import subprocess
 import pandas as pd
+from datetime import datetime
 from training import split_data
 
 # Load config.json and get environment variables
@@ -152,6 +153,21 @@ def execution_time() -> list:
         setup="import subprocess",
         number=1,
     )
+
+    # Store execution times with timestamps
+    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+    execution_times = {
+        "data_ingestion_time": data_ingestion_time,
+        "model_training_time": model_training_time,
+    }
+
+    # Save execution times to files with timestamps
+    execution_dir = os.path.join("olddiagnostics", timestamp)
+    os.makedirs(execution_dir, exist_ok=True)
+
+    for task, time in execution_times.items():
+        with open(os.path.join(execution_dir, f"{task}_{timestamp}.txt"), "w") as f:
+            f.write(f"{task}: {time} seconds")
 
     logging.info(f"Data Ingestion Time: {data_ingestion_time}")
     logging.info(f"Model Training Time: {model_training_time}")
