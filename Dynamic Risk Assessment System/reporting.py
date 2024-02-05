@@ -103,6 +103,28 @@ def create_header(logo_path):
         add_logo_to_header(canvas, doc, logo_path)
     return header
 
+def read_ingested_files_info(file_path):
+    """
+    Reads the 'ingestedfiles.txt' and formats the information for inclusion in the PDF.
+
+    Args:
+        file_path (str): The path to 'ingestedfiles.txt'.
+
+    Returns:
+        list: Formatted ingestion information for each file.
+    """
+    with open(file_path, 'r') as file:
+        lines = file.readlines()
+
+    # Process and format each line
+    formatted_lines = []
+    for line in lines:
+        parts = line.split('\t')  # Assuming the file is tab-delimited
+        if len(parts) == 2:
+            formatted_lines.append(f"{parts[0].strip()} - {parts[1].strip()}")
+
+    return formatted_lines
+
 def generate_pdf_report(confusion_matrix):
     """
     Generate a PDF report with a confusion matrix plot.
@@ -126,13 +148,23 @@ def generate_pdf_report(confusion_matrix):
 
     styles = getSampleStyleSheet()
     doc = SimpleDocTemplate(report_filename, pagesize=A4, rightMargin=72, leftMargin=72, topMargin=120, bottomMargin=72)
-    story = [Spacer(1, -0.5*inch)]  # Spacer to push the title down from the logo
+    story = [Spacer(1, -0.5*inch)]
 
     # Add a title
     story.append(Paragraph("Model Performance Report", styles['Title']))
     story.append(Spacer(1, 0.25*inch))
+    
+    # Read and add ingestion files information
+    ingestion_info_path = os.path.join(dataset_csv_path, "ingestedfiles.txt")
+    ingestion_info = read_ingested_files_info(ingestion_info_path)
+    styles = getSampleStyleSheet()
+    story.append(Paragraph("Ingested Files Information:", styles['Heading2']))
+    for info in ingestion_info:
+        story.append(Paragraph(info, styles['Normal']))
+    story.append(Spacer(1, 0.25*inch))
 
     # Add the confusion matrix plot
+    story.append(Paragraph("Confusion Matrix:", styles['Heading2']))
     cm_img = Image("practicemodels/confusionmatrix.png", 4*inch, 3*inch)
     cm_img.hAlign = 'CENTER'
     story.append(cm_img)
@@ -164,14 +196,9 @@ def generate_pdf_report(confusion_matrix):
 
 
 def score_model():
-    #calculate a confusion matrix using the test data and the deployed model
-    #write the confusion matrix to the workspace
     confusion_matrix = generate_confusion_matrix(os.path.join(model_path, 'confusionmatrix.png'))
     pdf_report = generate_pdf_report(confusion_matrix)
 
 
-
-
 if __name__ == '__main__':
     score_model()
-
