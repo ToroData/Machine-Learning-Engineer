@@ -1,0 +1,5 @@
+{
+    "input_data": "data/census.csv",
+    "output_clean_data": "data/census_processed.csv",
+    "output_model_path": "model"
+}
